@@ -1,16 +1,69 @@
-// MAJOR: Users should be able to open and close a garage door to see or not see the list of items.
-// MINOR: By default, the garage door is closed and the list is not visible.
-// MINOR: When opened (by button or any click event you choose), the garage door should transition up and after a few seconds, the list of items should be fully visible and the garage door is gone.
-// MAJOR: User should be able to see the details of a particular item by clicking its name on the list. The user should see the following:
-// MINOR: The name of the particular garage item.
-// MINOR: The reason it lingers.
-// MINOR: A dropdown or other option to change the cleanliness of the item. When they change the cleanliness of the item, that change should be applied and persist on refresh.
-
-//start JS
 let items;
 
+const isSelected = (item, value) => {
+  if (item.itemCleanliness === value) {
+    return 'selected';
+  }
+  return null;
+}
+
+const adjustCleanliness = (item, idName) => {
+  const itemIndex = items.findIndex(thing => {
+    return thing.id === item.id;
+  });
+
+  newCleanliness = $(`#${idName}-cleanliness-dropdown`).val();
+  updatedItem = Object.assign({}, item, { itemCleanliness: newCleanliness });
+
+  items.splice(itemIndex, 1, updatedItem);
+
+  fetch(`./api/v1/garageItems/${item.id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ itemCleanliness: newCleanliness }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  .catch(error => { throw error; });
+}
+
+const expandItem = (event, item, idName) => {
+  const cleanlinessOptions = ['Sparkling', 'Dusty', 'Rancid']
+  if (cleanlinessOptions.find(option => option === event.target.value)) {
+    return;
+  }
+  if ($(`#${idName}`).hasClass('viewing')) {
+    $(`#${idName}-expanded`).remove();
+    $(`#${idName}`).removeClass('viewing');
+  } else {
+    $(`#${idName}`).addClass('viewing');
+    $(`#${idName}`).append(
+      `<div class="expanded-item"
+      id="${idName}-expanded">
+      <p>Name: ${item.name}</p>
+      <p>Reason for Lingering: ${item.reasonForLingering}</p>
+      <p>To auomatically adjust the item's cleanliness, select a new option from the menu below.</p>
+      <select id="${idName}-cleanliness-dropdown">
+        <option value="Sparkling" ${isSelected(item, 'Sparkling')}>Sparkling</option>
+        <option value="Dusty" ${isSelected(item, 'Dusty')}>Dusty</option>
+        <option value="Rancid" ${isSelected(item, 'Rancid')}>Rancid</option>
+      </select>
+    </div>`
+  );
+  $(`#${idName}-cleanliness-dropdown`).change(() => { adjustCleanliness(item, idName); })
+  }
+}
+
 const appendItem = item => {
-  $('.item-names').append(`<p class="item-name" data-item=${item}>${item.name}</p>`)
+  const idName = item.name.replace(/\s+/g, '-').toLowerCase();
+  const itemWithId = Object.assign({ idName }, item);
+  $('.item-names').append(`<p class="item-name"
+    id=${idName}
+    data-item=${itemWithId}>
+      ${item.name}
+    </p>`);
+  $(`#${idName}`).click(() => { expandItem(event, item, idName); });
   let currentCleanCount = parseInt($(`#${item.itemCleanliness}`).text());
   currentCleanCount++;
   $(`#${item.itemCleanliness}`).text(currentCleanCount);
@@ -75,6 +128,24 @@ const reverseItems = () => {
   items.forEach(item => { appendItem(item); });
 }
 
+const toggleItemsView = () => {
+  if ($('.view-items-button').hasClass('inactive')) {
+    $('.view-items-button').addClass('active');
+    $('.view-items-button').removeClass('inactive');
+    $('.item-list').show();
+    $('.sort-items-button').show();
+    $('.garage-door').hide();
+    $('.view-items-button').text('Hide Garage Items');
+  } else {
+    $('.view-items-button').addClass('inactive');
+    $('.view-items-button').removeClass('active');
+    $('.item-list').hide();
+    $('.sort-items-button').hide();
+    $('.garage-door').show();
+    $('.view-items-button').text('View Garage Items');
+  }
+}
+
 
 fetch('./api/v1/garageItems')
   .then(res => res.json())
@@ -87,3 +158,4 @@ fetch('./api/v1/garageItems')
   $('#submit-form').click(addItem);
   $('#alphabetical').click(sortItems);
   $('#reverse-a').click(reverseItems);
+  $('.view-items-button').click(toggleItemsView);
