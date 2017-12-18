@@ -30,29 +30,30 @@ app.get('/api/v1/garageItems', (request, response) => {
     });
 });
 
-app.get('/api/vi/garageItems/:id', (request, response) => {
-  const { id } = request.params;
-  database('garageItems').where('id', id).select()
-    .then(items => {
-      if (items.length) {
-        return response.status(200).json(items);
-      } else {
-        return response.status(404).json({
-          error: 'No items with that id found.'
-        });
-      }
-    })
-    .catch(error => {
-      return response.status(500).json({ error });
-    });
-});
+//might not need this one, not working
+// app.get('/api/vi/garageItems/:id', (request, response) => {
+//   const { id } = request.params;
+//
+//   database('garageItems').where('id', id).select()
+//     .then(items => {
+//       if (!items.length) {
+//         return response.status(404).json({
+//           error: 'No items with that id found.'
+//         });
+//       }
+//       return response.status(200).json(items);
+//     })
+//     .catch(error => {
+//       return response.status(500).json({ error });
+//     });
+// });
 
 app.post('/api/v1/garageItems',
   (request, response, next) => { checkParams(['name', 'reasonForLingering', 'itemCleanliness'], request.body, response, next); },
   (request, response) => {
     const item = request.body;
 
-    database('garageItems').insert(item, 'id')
+    database('garageitems').insert(item, 'id')
       .then(items => {
         return response.status(201).json({ id: items[0] });
       })
@@ -65,7 +66,7 @@ app.patch('/api/v1/garageItems/:id', (request, response) => {
   const { id } = request.params;
   const updatedItem = request.body;
 
-  database('houses').where('id', id).update(updatedItem, '*')
+  database('garageItems').where('id', id).update(updatedItem, '*')
     .then(results => {
       if (!results.length) {
         return response.status(404).json({ error: `Cannot find an item with the id of ${id}.` });
