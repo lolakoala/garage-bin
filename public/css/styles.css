@@ -8,6 +8,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 h1 {
@@ -55,12 +56,6 @@ section {
   color: #d3d3d3;
 }
 
-button:hover,
-select:hover {
-  cursor: pointer;
-  background-color: blue;
-}
-
 input {
   padding-left: 10px;
 }
@@ -68,10 +63,6 @@ input {
 #dropdown-instructions {
   background-color: white;
   color: purple;
-}
-
-div {
-  border: 1px solid black;
 }
 
 .item-list,
@@ -85,6 +76,8 @@ div {
   background-repeat: no-repeat;
   width: 800px;
   height: 500px;
+  border: 5px solid purple;
+  border-radius: 25px;
 }
 
 .item-list {
@@ -93,4 +86,86 @@ div {
   background-repeat: no-repeat;
   width: 800px;
   height: 500px;
+  border: 5px solid purple;
+  border-radius: 25px;
+  position: relative;
+}
+
+.view-items button {
+  width: 800px;
+  height: 40px;
+  font-size: 20px;
+  background-color: purple;
+  color: white;
+  border: none;
+  margin: 10px 0px;
+  border-radius: 25px;
+}
+
+button:hover,
+select:hover {
+  cursor: pointer;
+  background-color: blue;
+}
+
+.item-names {
+  margin: 20px;
+  border: none;
+  border-radius: 25px;
+  background-color: #D8BFD8;
+  opacity: 0.9;
+  color: purple;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  overflow: scroll;
+  height: 250px;
+}
+
+.item-name {
+  display: inline-block;
+  opacity: 1;
+  font-weight: bold;
+}
+
+.item-name:hover {
+  cursor: pointer;
+  color: blue;
+}
+
+h3 {
+  color: purple;
+  font-size: 30px;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.counts {
+  display: flex;
+  position: absolute;
+  width: 800px;
+  bottom: 0px;
+  left: 0px;
+  background-color: purple;
+  font-size: 20px;
+  justify-content: space-between;
+  color: white;
+}
+
+.counts p {
+  display: inline-block;
+  margin: 20px;
+}
+
+.expanded-item {
+  margin: 10px;
+  padding: 20px;
+  background-color: purple;
+  color: white;
+  overflow: scroll;
+  height: 150px;
+  width: 250px;
+  border: none;
+  border-radius: 25px;
 }
