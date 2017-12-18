@@ -30,30 +30,29 @@ app.get('/api/v1/garageItems', (request, response) => {
     });
 });
 
-//might not need this one, not working
-// app.get('/api/vi/garageItems/:id', (request, response) => {
-//   const { id } = request.params;
-//
-//   database('garageItems').where('id', id).select()
-//     .then(items => {
-//       if (!items.length) {
-//         return response.status(404).json({
-//           error: 'No items with that id found.'
-//         });
-//       }
-//       return response.status(200).json(items);
-//     })
-//     .catch(error => {
-//       return response.status(500).json({ error });
-//     });
-// });
+app.get('/api/v1/garageItems/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('garageItems').where('id', id).select()
+    .then(items => {
+      if (!items.length) {
+        return response.status(404).json({
+          error: `No items with the id of ${id} found.`
+        });
+      }
+      return response.status(200).json(items);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
 
 app.post('/api/v1/garageItems',
   (request, response, next) => { checkParams(['name', 'reasonForLingering', 'itemCleanliness'], request.body, response, next); },
   (request, response) => {
     const item = request.body;
 
-    database('garageitems').insert(item, 'id')
+    database('garageItems').insert(item, 'id')
       .then(items => {
         return response.status(201).json({ id: items[0] });
       })

@@ -67,4 +67,71 @@ describe('API Routes', done => {
         .catch(error => { throw error; });
     });
   });
+
+  describe('GET /api/v1/garageItems/:id', () => {
+    it('should return item with matching id', () => {
+      return chai.request(server)
+        .get('/api/v1/garageItems/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('name');
+          response.body[0].should.have.property('id');
+          response.body[0].name.should.equal('test-basketball');
+          response.body[0].should.have.property('reasonForLingering');
+          response.body[0].reasonForLingering.should.equal('momento from highschool games');
+          response.body[0].should.have.property('itemCleanliness');
+          response.body[0].itemCleanliness.should.equal('Dusty');
+        })
+        .catch(error => { throw error; });
+    });
+
+    it('should return 404 if no item found', () => {
+      return chai.request(server)
+        .get('/api/v1/garageItems/10987')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.should.have.property('error');
+          response.body.error.should.equal('No items with the id of 10987 found.');
+        });
+    });
+  });
+
+  describe('POST /api/v1/garageItems', () => {
+    it('should add new garage item and return 204', () => {
+      return chai.request(server)
+        .post('/api/v1/garageItems')
+        .send({
+          name: 'suitcase full of cotton balls',
+          reasonForLingering: 'I am a bit eccentric',
+          itemCleanliness: 'Sparkling',
+          id: 5
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          response.body.should.have.property('id');
+        })
+        .catch(error => { throw error; });
+    });
+
+    it('should return 422 if you are missing parameters', () => {
+      return chai.request(server)
+        .post('/api/v1/garageItems')
+        .send({
+          name: 'suitcase full of cotton balls',
+          reasonForLingering: 'I am a bit eccentric',
+          id: 5
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.body.should.be.a('object');
+        })
+        .catch(error => { throw error; });
+    });
+  });
 });
