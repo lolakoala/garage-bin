@@ -46,7 +46,6 @@ app.get('/api/vi/garageItems/:id', (request, response) => {
       return response.status(500).json({ error });
     });
 });
-//end point to add item
 
 app.post('/api/v1/garageItems',
   (request, response, next) => { checkParams(['name', 'reasonForLingering', 'itemCleanliness'], request.body, response, next); },
@@ -54,14 +53,29 @@ app.post('/api/v1/garageItems',
     const item = request.body;
 
     database('garageItems').insert(item, 'id')
-      .then(item => {
-        return response.status(201).json({ id: item[0] });
+      .then(items => {
+        return response.status(201).json({ id: items[0] });
       })
       .catch(error => {
         return response.status(500).json({ error });
       });
   });
-//end point to modify item
+
+app.patch('/api/v1/garageItems/:id', (request, response) => {
+  const { id } = request.params;
+  const updatedItem = request.body;
+
+  database('houses').where('id', id).update(updatedItem, '*')
+    .then(results => {
+      if (!results.length) {
+        return response.status(404).json({ error: `Cannot find an item with the id of ${id}.` });
+      }
+      return response.sendStatus(204);
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
 
 app.listen(app.get('port'), () => {
   console.log(`Garage Bin is running on ${app.get('port')}.`);
