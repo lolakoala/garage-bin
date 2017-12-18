@@ -7,7 +7,7 @@ const isSelected = (item, value) => {
   return null;
 }
 
-const adjustCleanliness = (item, idName) => {
+const adjustItemsArray = (item, idName) => {
   const itemIndex = items.findIndex(thing => {
     return thing.id === item.id;
   });
@@ -16,6 +16,10 @@ const adjustCleanliness = (item, idName) => {
   updatedItem = Object.assign({}, item, { itemCleanliness: newCleanliness });
 
   items.splice(itemIndex, 1, updatedItem);
+}
+
+const adjustCleanliness = (item, idName) => {
+  adjustItemsArray(item, idName);
 
   fetch(`./api/v1/garageItems/${item.id}`, {
     method: 'PATCH',
@@ -28,31 +32,51 @@ const adjustCleanliness = (item, idName) => {
   .catch(error => { throw error; });
 }
 
+const hideItem = idName => {
+  $(`#${idName}-expanded`).remove();
+  $(`#${idName}`).removeClass('viewing');
+}
+
+const showItem = (item, idName) => {
+  $(`#${idName}`).addClass('viewing');
+  $(`#${idName}`).append(
+    `<div class="expanded-item"
+    id="${idName}-expanded">
+    <p>Name: ${item.name}</p>
+    <p>Reason for Lingering: ${item.reasonForLingering}</p>
+    <p>To auomatically adjust the item's cleanliness, select a new option from the menu below.</p>
+    <select id="${idName}-cleanliness-dropdown">
+      <option value="Sparkling" ${isSelected(item, 'Sparkling')}>Sparkling</option>
+      <option value="Dusty" ${isSelected(item, 'Dusty')}>Dusty</option>
+      <option value="Rancid" ${isSelected(item, 'Rancid')}>Rancid</option>
+    </select>
+  </div>`
+  );
+  $(`#${idName}-cleanliness-dropdown`).change(() => { adjustCleanliness(item, idName); });
+}
+
 const expandItem = (event, item, idName) => {
   const cleanlinessOptions = ['Sparkling', 'Dusty', 'Rancid']
   if (cleanlinessOptions.find(option => option === event.target.value)) {
     return;
   }
   if ($(`#${idName}`).hasClass('viewing')) {
-    $(`#${idName}-expanded`).remove();
-    $(`#${idName}`).removeClass('viewing');
+    hideItem(idName);
   } else {
-    $(`#${idName}`).addClass('viewing');
-    $(`#${idName}`).append(
-      `<div class="expanded-item"
-      id="${idName}-expanded">
-      <p>Name: ${item.name}</p>
-      <p>Reason for Lingering: ${item.reasonForLingering}</p>
-      <p>To auomatically adjust the item's cleanliness, select a new option from the menu below.</p>
-      <select id="${idName}-cleanliness-dropdown">
-        <option value="Sparkling" ${isSelected(item, 'Sparkling')}>Sparkling</option>
-        <option value="Dusty" ${isSelected(item, 'Dusty')}>Dusty</option>
-        <option value="Rancid" ${isSelected(item, 'Rancid')}>Rancid</option>
-      </select>
-    </div>`
-  );
-  $(`#${idName}-cleanliness-dropdown`).change(() => { adjustCleanliness(item, idName); })
+    showItem(item, idName);
   }
+}
+
+const incrementCleanCount = item => {
+  let currentCleanCount = parseInt($(`#${item.itemCleanliness}`).text());
+  currentCleanCount++;
+  $(`#${item.itemCleanliness}`).text(currentCleanCount);
+}
+
+const incrementTotal = () => {
+  let currentTotal = parseInt($('#total').text());
+  currentTotal++;
+  $('#total').text(currentTotal);
 }
 
 const appendItem = item => {
@@ -64,12 +88,8 @@ const appendItem = item => {
       ${item.name}
     </p>`);
   $(`#${idName}`).click(() => { expandItem(event, item, idName); });
-  let currentCleanCount = parseInt($(`#${item.itemCleanliness}`).text());
-  currentCleanCount++;
-  $(`#${item.itemCleanliness}`).text(currentCleanCount);
-  let currentTotal = parseInt($('#total').text());
-  currentTotal++;
-  $('#total').text(currentTotal);
+  incrementCleanCount(item);
+  incrementTotal();
 }
 
 const addItem = () => {
@@ -104,7 +124,7 @@ const sortABC = () => {
     return 1;
   }
   return 0;
-});
+  });
 }
 
 const emptyVals = () => {
@@ -128,21 +148,29 @@ const reverseItems = () => {
   items.forEach(item => { appendItem(item); });
 }
 
+const showItemsList = () => {
+  $('.view-items-button').addClass('active');
+  $('.view-items-button').removeClass('inactive');
+  $('.item-list').show();
+  $('.sort-items-button').show();
+  $('.garage-door').hide();
+  $('.view-items-button').text('Hide Garage Items');
+}
+
+const hideItemsList = () {
+  $('.view-items-button').addClass('inactive');
+  $('.view-items-button').removeClass('active');
+  $('.item-list').hide();
+  $('.sort-items-button').hide();
+  $('.garage-door').show();
+  $('.view-items-button').text('View Garage Items');
+}
+
 const toggleItemsView = () => {
   if ($('.view-items-button').hasClass('inactive')) {
-    $('.view-items-button').addClass('active');
-    $('.view-items-button').removeClass('inactive');
-    $('.item-list').show();
-    $('.sort-items-button').show();
-    $('.garage-door').hide();
-    $('.view-items-button').text('Hide Garage Items');
+    showItemsList();
   } else {
-    $('.view-items-button').addClass('inactive');
-    $('.view-items-button').removeClass('active');
-    $('.item-list').hide();
-    $('.sort-items-button').hide();
-    $('.garage-door').show();
-    $('.view-items-button').text('View Garage Items');
+    hideItemsList();
   }
 }
 
