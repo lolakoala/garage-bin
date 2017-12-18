@@ -48,7 +48,7 @@ describe('API Routes', done => {
   });
 
   describe('GET /api/v1/garageItems', () => {
-    it('should return all houses', () => {
+    it('should return all garage items', () => {
       return chai.request(server)
         .get('/api/v1/garageItems')
         .then(response => {

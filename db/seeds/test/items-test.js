@@ -6,22 +6,26 @@ exports.seed = function(knex, Promise) {
         {
           name: 'test-basketball',
           reasonForLingering: 'momento from highschool games',
-          itemCleanliness: 'Dusty'
+          itemCleanliness: 'Dusty',
+          id: 1
         },
         {
           name: 'test-tire iron',
           reasonForLingering: 'needed for car maintenance',
-          itemCleanliness: 'Dusty'
+          itemCleanliness: 'Dusty',
+          id: 2
         },
         {
           name: 'test-old couch',
           reasonForLingering: 'neglected to declutter',
-          itemCleanliness: 'Rancid'
+          itemCleanliness: 'Rancid',
+          id: 3
         },
         {
           name: 'test-trophy',
           reasonForLingering: 'no room in house',
-          itemCleanliness: 'Sparkling'
+          itemCleanliness: 'Sparkling',
+          id: 4
         }
       ]);
     })
