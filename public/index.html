@@ -8,7 +8,15 @@
   <body>
     <h1>Garage Bin</h1>
     <section class="form">
+      <input type="text" placeholder="Item Name" class="form-field" id="name-field" />
+      <input type="text" placeholder="Reason for Lingering" class="form-field" id="reason-field" />
+      <p id="dropdown-instructions">Select item cleanliness from menu below.</p>
+      <select id="cleanliness-dropdown">
+        <option value="Sparkling">Sparkling</option>
+        <option value="Dusty">Dusty</option>
+        <option value="Rancid">Rancid</option>
     </section>
+    <button class="submit-form">Submit</button>
     <section class="view-items">
     </section>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
