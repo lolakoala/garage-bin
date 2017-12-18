@@ -134,4 +134,32 @@ describe('API Routes', done => {
         .catch(error => { throw error; });
     });
   });
+
+  describe('PATCH /api/v1/garageItems/:id', () => {
+    it('should update item and send 204 status', () => {
+      return chai.request(server)
+        .patch('/api/v1/garageItems/2')
+        .send({
+          name: 'dirty socks'
+        })
+        .then(response => {
+          response.should.have.status(204);
+        })
+        .catch(error => { throw error; });
+    });
+
+    it('should send 404 if no item matches id', () => {
+      return chai.request(server)
+        .patch('/api/v1/garageItems/10987')
+        .send({
+          name: 'dirty socks'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.body.should.be.a('object');
+          response.body.error.should.contain(`Cannot find an item with the id of 10987.`);
+        })
+        .catch(error => { throw error; });
+    });
+  });
 });
