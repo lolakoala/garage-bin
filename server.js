@@ -51,8 +51,16 @@ app.get('/api/vi/garageItems/:id', (request, response) => {
 app.post('/api/v1/garageItems',
   (request, response, next) => { checkParams(['name', 'reasonForLingering', 'itemCleanliness'], request.body, response, next); },
   (request, response) => {
+    const item = request.body;
 
-});
+    database('garageItems').insert(item, 'id')
+      .then(item => {
+        return response.status(201).json({ id: item[0] });
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  });
 //end point to modify item
 
 app.listen(app.get('port'), () => {
