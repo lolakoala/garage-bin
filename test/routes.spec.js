@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 describe('Client Routes', () => {
 
-  it.skip('should return the homepage with text', () => {
+  it('should return the homepage with text', () => {
     return chai.request(server)
       .get('/')
       .then(response => {
