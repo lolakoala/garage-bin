@@ -3,26 +3,29 @@
   <head>
     <meta charset="utf-8">
     <title>Garage Bin</title>
+    <link href="https://fonts.googleapis.com/css?family=Bungee" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
   </head>
   <body>
     <h1>Garage Bin</h1>
-    <section class="form">
-      <input type="text" placeholder="Item Name" class="form-field" id="name-field" />
-      <input type="text" placeholder="Reason for Lingering" class="form-field" id="reason-field" />
-      <p id="dropdown-instructions">Select item cleanliness from menu below.</p>
-      <select id="cleanliness-dropdown">
-        <option value="Sparkling">Sparkling</option>
-        <option value="Dusty">Dusty</option>
-        <option value="Rancid">Rancid</option>
-      </select>
-      <button class="submit-form">Add Garage Item</button>
-    </section>
-    <section class="view-items">
-      <div class="garage-door"></div>
-      <div class="item-list" display="none"></div>
-      <button class="view-items-button">View Garage Items</button>
-    </section>
+    <article>
+      <section class="form">
+        <input type="text" placeholder="Item Name" class="form-field" id="name-field" />
+        <input type="text" placeholder="Reason for Lingering" class="form-field" id="reason-field" />
+        <p id="dropdown-instructions">Select item cleanliness from menu below.</p>
+        <select id="cleanliness-dropdown">
+          <option value="Sparkling">Sparkling</option>
+          <option value="Dusty">Dusty</option>
+          <option value="Rancid">Rancid</option>
+        </select>
+        <button class="submit-form">Add Garage Item</button>
+      </section>
+      <section class="view-items">
+        <div class="garage-door">Garage Door</div>
+        <div class="item-list">Item List</div>
+        <button class="view-items-button">View Garage Items</button>
+      </section>
+    </article>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
     <script src="scripts/scripts.js"></script>
   </body>
