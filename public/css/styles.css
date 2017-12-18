@@ -31,6 +31,11 @@ article {
 section {
   display: flex;
   flex-direction: column;
+  height: auto;
+}
+
+.item-list {
+  height: auto;
 }
 
 div {
@@ -39,6 +44,7 @@ div {
   width: 500px;
 }
 
-.item-list {
+/*.item-list,
+.sort-items-button {
   display: none;
-}
+}*/
