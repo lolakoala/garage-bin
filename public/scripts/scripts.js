@@ -151,13 +151,13 @@ const reverseItems = () => {
 const showItemsList = () => {
   $('.view-items-button').addClass('active');
   $('.view-items-button').removeClass('inactive');
-  $('.item-list').show();
-  $('.sort-items-button').show();
-  $('.garage-door').hide();
+  $('.item-list').show(1000);
+  $('.sort-items-button').show(1000);
+  $('.garage-door').hide(1000);
   $('.view-items-button').text('Hide Garage Items');
 }
 
-const hideItemsList = () {
+const hideItemsList = () => {
   $('.view-items-button').addClass('inactive');
   $('.view-items-button').removeClass('active');
   $('.item-list').hide();
