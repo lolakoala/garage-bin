@@ -18,12 +18,21 @@
           <option value="Dusty">Dusty</option>
           <option value="Rancid">Rancid</option>
         </select>
-        <button class="submit-form">Add Garage Item</button>
+        <button id="submit-form">Add Garage Item</button>
       </section>
       <section class="view-items">
         <div class="garage-door">Garage Door</div>
-        <div class="item-list">Item List</div>
-        <button class="view-items-button">View Garage Items</button>
+        <div class="item-list">Item List
+          <div class="item-names">
+          </div>
+          <p class="cleanliness-count">Sparkling Items: <span id="Sparkling">0</span></p>
+          <p class="cleanliness-count">Dusty Items: <span id="Dusty">0</span></p>
+          <p class="cleanliness-count">Rancid Items: <span id="Rancid">0</span></p>
+          <p class="item-count">Total Items: <span id="total">0</span></p>
+        </div>
+        <button class="view-items-button inactive">View Garage Items</button>
+        <button class="sort-items-button" id="alphabetical">Alphabetical Order</button>
+        <button class="sort-items-button" id="reverse-a">Reverse Alphabetical Order</button>
       </section>
     </article>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
