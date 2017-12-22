@@ -179,7 +179,9 @@ fetch('./api/v1/garageItems')
   .then(res => res.json())
   .then(res => {
     items = res;
-    items.forEach(item => { appendItem(item); })
+    if (items.length) {
+      items.forEach(item => { appendItem(item); })
+    }
   })
   .catch(error => { throw error; });
 
